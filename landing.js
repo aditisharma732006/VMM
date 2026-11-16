@@ -169,24 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
         duration: 1
     });
 
-    // Add this function to handle the launch click
-    function handleLaunchClick(e) {
-        e.preventDefault();
-        const pageTransition = document.querySelector('.page-transition');
-        
-        // Show transition
-        pageTransition.style.display = 'flex';
-        pageTransition.classList.add('active');
-        
-        // Navigate after transition completes
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 1000);
-    }
-
-    // Update the existing launch button event listener
-    document.getElementById('launch-simulator').addEventListener('click', handleLaunchClick);
-
     // Page Transition
     const launchButton = document.getElementById('launch-simulator');
     const pageTransition = document.querySelector('.page-transition');
@@ -217,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
         pageTransition.classList.add('active');
         
         // Add some dynamic circuit lines during transition
-        setInterval(() => {
+        const lineInterval = setInterval(() => {
             const line = document.createElement('div');
             line.className = 'circuit-line';
             line.style.width = Math.random() * 100 + 50 + 'px';
@@ -242,8 +224,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Navigate to simulator after transition
         setTimeout(() => {
             pageTransition.classList.add('exit');
+            clearInterval(lineInterval);
             setTimeout(() => {
-                window.location.href = '/index.html';
+                window.location.href = 'simulator.html';
             }, 500);
         }, 1500);
     });

@@ -3,149 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memory Management Simulator</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Virtual Memory Management - Interactive Learning Platform</title>
+    <link rel="stylesheet" href="landing.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.0/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.0/ScrollTrigger.min.js"></script>
 </head>
-<body>
-    <div class="container">
-        <header>
-            <h1><i class="fas fa-memory"></i> Memory Management Simulator</h1>
-            <p>Visualize paging, page replacement, and fragmentation</p>
-        </header>
-
-        <div class="simulator-container">
-            <div class="controls">
-                <div class="control-group">
-                    <h2>Memory Configuration</h2>
-                    <div class="control-item">
-                        <label for="memorySize">Total Memory (KB):</label>
-                        <input type="range" id="memorySize" min="16" max="1024" step="16" value="64">
-                        <span id="memorySizeValue">64 KB</span>
-                    </div>
-                    <div class="control-item">
-                        <label for="pageSize">Page Size (KB):</label>
-                        <input type="range" id="pageSize" min="1" max="16" step="1" value="4">
-                        <span id="pageSizeValue">4 KB</span>
-                    </div>
-                    <div class="control-item">
-                        <label for="processSize">Process Size (KB):</label>
-                        <input type="range" id="processSize" min="1" max="128" step="1" value="18">
-                        <span id="processSizeValue">18 KB</span>
-                    </div>
-                    <div class="info-box">
-                        <p id="pageCalculation">Process needs 5 pages (20 KB total, 2 KB internal fragmentation)</p>
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <h2>Algorithm</h2>
-                    <div class="algorithm-select">
-                        <button id="lruBtn" class="algorithm-btn active">LRU</button>
-                        <button id="optimalBtn" class="algorithm-btn">Optimal</button>
-                    </div>
-                    <button id="explainBtn" class="btn">
-                        <i class="fas fa-question-circle"></i> Explain
-                    </button>
-                </div>
-
-                <div class="control-group">
-                    <h2>Simulation</h2>
-                    <div class="simulation-controls">
-                        <button id="prevStep" class="btn" disabled>
-                            <i class="fas fa-step-backward"></i> Previous
-                        </button>
-                        <button id="nextStep" class="btn primary">
-                            <i class="fas fa-step-forward"></i> Next Step
-                        </button>
-                        <button id="autoRun" class="btn">
-                            <i class="fas fa-play"></i> Auto Run
-                        </button>
-                        <button id="reset" class="btn">
-                            <i class="fas fa-undo"></i> Reset
-                        </button>
-                    </div>
-                    <div class="control-item">
-                        <label for="refString">Reference String (page numbers):</label>
-                        <input type="text" id="refString" value="1,2,3,4,1,2,5,1,2,3,4,5">
-                    </div>
-                </div>
+<body class="light-mode">
+    <div class="page-transition">
+        <div class="transition-content">
+            <i class="fas fa-microchip"></i>
+            <h2>Launching Simulator</h2>
+        </div>
+        <div class="circuit-lines"></div>
+    </div>
+    <nav class="main-nav">
+        <div class="nav-content">
+            <div class="logo">
+                <i class="fas fa-microchip"></i>
+                <span>MemoryViz</span>
             </div>
-
-            <div class="visualization">
-                <div class="memory-display">
-                    <h2>Physical Memory</h2>
-                    <div class="frames-container">
-                        <div class="frames" id="frames"></div>
-                        <div class="fragmentation-info" id="fragmentationInfo"></div>
-                    </div>
-                </div>
-
-                <div class="details">
-                    <div class="page-table">
-                        <h2>Page Table</h2>
-                        <table id="pageTable">
-                            <thead>
-                                <tr>
-                                    <th>Page</th>
-                                    <th>Frame</th>
-                                    <th>Last Used</th>
-                                    <th>Next Use</th>
-                                    <th>Used KB</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-
-                    <div class="reference-string">
-                        <h2>Reference Sequence</h2>
-                        <div class="sequence" id="sequence"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="metrics">
-                <div class="metric">
-                    <span class="metric-label">Page Faults:</span>
-                    <span id="faultCount" class="metric-value">0</span>
-                </div>
-                <div class="metric">
-                    <span class="metric-label">Hit Ratio:</span>
-                    <span id="hitRatio" class="metric-value">0%</span>
-                </div>
-                <div class="metric">
-                    <span class="metric-label">Fragmentation:</span>
-                    <span id="fragmentation" class="metric-value">0 KB</span>
-                </div>
-                <div class="metric">
-                    <span class="metric-label">Step:</span>
-                    <span id="currentStep" class="metric-value">0/0</span>
-                </div>
-            </div>
-
-            <div class="log">
-                <h2>Simulation Log</h2>
-                <div class="log-content" id="logContent"></div>
+            <div class="nav-links">
+                <a href="#hero">Home</a>
+                <a href="#features">Features</a>
+                <a href="#concepts">Concepts</a>
+                <a href="#simulator">Simulator</a>
+                <button id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
             </div>
         </div>
-    </div>
+    </nav>
 
-    <div id="explanationModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2 id="algorithmName">Algorithm Explanation</h2>
-            <div id="algorithmExplanation"></div>
-            <div class="comparison">
-                <h3>Key Differences</h3>
-                <p><strong>LRU</strong> replaces the least recently used page (past-looking)</p>
-                <p><strong>Optimal</strong> replaces the page with furthest future use (requires future knowledge)</p>
-                <p>Optimal has theoretical minimum page faults but isn't practical to implement</p>
+    <section id="hero" class="hero-section">
+        <div class="hero-content">
+            <h1>Virtual Memory Management</h1>
+            <p>Interactive visualization and learning platform</p>
+            <a href="simulator.html" class="cta-button" id="launch-simulator">Launch Simulator</a>
+        </div>
+        <div class="hero-animation">
+            <canvas id="memoryCanvas"></canvas>
+        </div>
+    </section>
+
+    <section id="features" class="features-section">
+        <h2>Key Features</h2>
+        <div class="feature-grid">
+            <div class="feature-card" data-aos="fade-up">
+                <i class="fas fa-chart-line"></i>
+                <h3>Real-time Visualization</h3>
+                <p>Watch memory management algorithms in action with dynamic visualizations</p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                <i class="fas fa-brain"></i>
+                <h3>Adaptive Learning</h3>
+                <p>Smart algorithms that adapt to memory access patterns</p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                <i class="fas fa-project-diagram"></i>
+                <h3>Multiple Algorithms</h3>
+                <p>Compare different page replacement strategies</p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                <i class="fas fa-analytics"></i>
+                <h3>Performance Metrics</h3>
+                <p>Detailed statistics and performance analysis</p>
             </div>
         </div>
-    </div>
+    </section>
 
-    <script src="js/simulator.js"></script>
+    <section id="concepts" class="concepts-section">
+        <div class="concept-timeline">
+            <div class="concept-item" data-aos="fade-right">
+                <div class="concept-content">
+                    <h3>Virtual Memory</h3>
+                    <p>Virtual memory is a memory management technique that provides an idealized abstraction of the storage resources that are actually available on a given machine.</p>
+                </div>
+                <div class="concept-visual">
+                    <div class="memory-blocks"></div>
+                </div>
+            </div>
+            <div class="concept-item" data-aos="fade-left">
+                <div class="concept-content">
+                    <h3>Paging</h3>
+                    <p>Paging is a memory management scheme that eliminates the need for contiguous allocation of physical memory.</p>
+                </div>
+                <div class="concept-visual">
+                    <div class="paging-animation"></div>
+                </div>
+            </div>
+            <div class="concept-item" data-aos="fade-right">
+                <div class="concept-content">
+                    <h3>Page Replacement</h3>
+                    <p>When a page fault occurs, the operating system needs to choose which page to remove from memory to make room for the new page.</p>
+                </div>
+                <div class="concept-visual">
+                    <div class="replacement-animation"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="simulator" class="simulator-preview">
+        <h2>Interactive Simulator</h2>
+        <div class="simulator-showcase">
+            <div class="showcase-content">
+                <h3>Hands-on Learning</h3>
+                <p>Experience memory management concepts through our interactive simulator.</p>
+                <ul>
+                    <li><i class="fas fa-check"></i> Real-time visualization</li>
+                    <li><i class="fas fa-check"></i> Multiple algorithms</li>
+                    <li><i class="fas fa-check"></i> Performance analysis</li>
+                    <li><i class="fas fa-check"></i> Custom configurations</li>
+                </ul>
+                <a href="simulator.html" class="cta-button">Try it Now</a>
+            </div>
+            <div class="showcase-preview">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='400' viewBox='0 0 640 400'%3E%3Crect width='640' height='400' rx='24' fill='%230f172a'/%3E%3Crect x='40' y='70' width='560' height='260' rx='18' fill='%231e293b'/%3E%3Crect x='80' y='110' width='160' height='90' rx='12' fill='%234f46e5'/%3E%3Crect x='260' y='110' width='160' height='90' rx='12' fill='%230ea5e9'/%3E%3Crect x='440' y='110' width='120' height='90' rx='12' fill='%2322c55e'/%3E%3Cpath d='M120 250h120' stroke='%23f8fafc' stroke-width='8' stroke-linecap='round'/%3E%3Cpath d='M300 250h120' stroke='%23f8fafc' stroke-width='8' stroke-linecap='round'/%3E%3Cpath d='M500 250h40' stroke='%23f8fafc' stroke-width='8' stroke-linecap='round'/%3E%3Ccircle cx='120' cy='250' r='8' fill='%23f8fafc'/%3E%3Ccircle cx='300' cy='250' r='8' fill='%23f8fafc'/%3E%3Ccircle cx='500' cy='250' r='8' fill='%23f8fafc'/%3E%3Ctext x='320' y='332' text-anchor='middle' font-family='Segoe UI, Arial, sans-serif' font-size='28' fill='%23f8fafc'%3EMemory Management Simulator%3C/text%3E%3C/svg%3E" alt="Simulator Preview" style="width:100%;max-width:420px;border-radius:16px;display:block;">
+            </div>
+        </div>
+    </section>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>MemoryViz</h4>
+                <p>An interactive learning platform for virtual memory management concepts.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="#hero">Home</a>
+                <a href="#features">Features</a>
+                <a href="#concepts">Concepts</a>
+                <a href="#simulator">Simulator</a>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <a href="#">Documentation</a>
+                <a href="#">API Reference</a>
+                <a href="#">GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="landing.js"></script>
 </body>
 </html>

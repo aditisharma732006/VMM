@@ -188,16 +188,22 @@ class MemorySimulator {
             }
             
             // Load new page - find the page info from processPages
-            const pageInfo = this.processPages.find(p => p.pageNum === page);
-            if (pageInfo) {
-                this.frames[replaceIndex] = {
-                    pageNum: pageInfo.pageNum,
-                    usedKB: pageInfo.usedKB,
-                    unusedKB: pageInfo.unusedKB,
-                    lastUsed: this.currentStep
+            let pageInfo = this.processPages.find(p => p.pageNum === page);
+            if (!pageInfo) {
+                pageInfo = {
+                    pageNum: page,
+                    usedKB: this.pageSizeKB,
+                    unusedKB: 0
                 };
-                this.pageTable.set(page, replaceIndex);
             }
+
+            this.frames[replaceIndex] = {
+                pageNum: pageInfo.pageNum,
+                usedKB: pageInfo.usedKB,
+                unusedKB: pageInfo.unusedKB,
+                lastUsed: this.currentStep
+            };
+            this.pageTable.set(page, replaceIndex);
         } else {
             // Page hit - update last used time
             this.pageHits++;
